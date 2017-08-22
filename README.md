@@ -1,3 +1,3 @@
 # 1 flex-add
-这是一个关于flexbox基础的骰子布局
- [demo](http://sannianmeichirou/1/lft.html)
+这是一
+ [demo](http://sannianmeichirou/1/3D立方体.html)
