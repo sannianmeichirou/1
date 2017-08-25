@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"> 
+  <title> 标题 </title>
+  <style type="text/css">
+	*{margin:0;padding:0;}
+	#warp{
+		width:520px;
+		height:280px;
+		margin:50px auto;
+		position:relative;
+		overflow:hidden;
+	}
+	#picbox ul{
+		width:1000%;
+		height:280px;
+		position:absolute;
+	}
+	#picbox ul li{
+		width:520px;
+		height:280px;
+		list-style:none;
+		float:left;
+	}
+	#btn div{
+		position:absolute;
+		width:30px;
+		height:40px;
+		top:50%;
+		margin-top:-20px;
+		text-align:center;
+		line-height:40px;
+		font-size:35px;
+		font-weight:bold;
+		background:rgba(0,0,0,0.3);
+		color:#fff;
+		cursor:pointer;
+	}
+	#left{ left:0;	}
+	#right{ right:0;	}
+	#tab{
+		width:70px;
+		height:14px;
+		position:absolute;
+		bottom:15px;
+		left:50%;
+		margin-left:-38px;	
+		border-radius:7px;
+		background:rgba(255,255,255,0.4);
+	}
+	#tab ul li{
+		list-style:none;
+		float:left;
+		width:10px;
+		height:10px;
+		border-radius:100%;
+		margin:2px 2px;
+		background:#999;
+		cursor:pointer;
+	}
+	#tab ul li.on{
+		background:#f60;
+	}
+  </style>
+  <script type="text/javascript" src=" http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js " ></script>
+ </head>
+ <body>
+  <div id="warp" class="">
+		<div id="picbox" class="">
+			<ul>
+				<li><a href=""><img src="img/1.jpg" width="" height="" border="0" alt=""></a></li>
+				<li><a href=""><img src="img/2.jpg" width="" height="" border="0" alt=""></a></li>
+				<li><a href=""><img src="img/3.jpg" width="" height="" border="0" alt=""></a></li>
+				<li><a href=""><img src="img/4.jpg" width="" height="" border="0" alt=""></a></li>
+				<li><a href=""><img src="img/5.jpg" width="" height="" border="0" alt=""></a></li>
+			</ul>
+		</div>
+		<div id="btn" class="">
+			<div id="right" class="">
+			&gt;	
+			</div>
+			<div id="left" class="">
+			&lt;
+			</div>
+		</div>
+		<div id="tab" class="">
+			<ul>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+		</div>
+  </div>
+	<script type="text/javascript">	
+		(function(){
+			var $warp = $('#warp');
+			var $picUl = $('#picbox ul');
+			var $picLi = $('#picbox ul li');
+			var $btn = $('#btn div');
+			var $tab = $('#tab ul li');
+			var imgindex = 0;
+			var nowTime = 0;
+			var timer;
+			//初始化
+			init();
+			auto();
+			function init(){
+				$picUl.css('left','-520px');
+				$tab.eq(0).addClass('on');
+				var clone1 = $picLi.eq(0).clone();
+				var clone2 = $picLi.eq(4).clone();
+				$picUl.append(clone1);
+				$picUl.prepend(clone2);
+				$(document).on('selectstart',function(){return false;});
+				$warp.hover(function(){
+					clearInterval(timer)
+				},function (){auto()});
+			};
+			//左右点击
+			$btn.click(function(){
+				if ( new Date() - nowTime > 600 )
+				{
+					nowTime = new Date();	
+					var i = $(this).index();
+					i?imgindex--:imgindex++;
+					var tabindex = imgindex%$tab.length;
+					$tab.eq(tabindex).addClass('on').siblings().removeClass('on');
+					$picUl.stop().animate({
+						'left': -520*(imgindex+1) + 'px'},
+						500,function(){
+								if ( imgindex == $picLi.length )
+								{
+									$picUl.css('left','-520px');
+									imgindex =0;
+								}
+								else if( imgindex == -1 )
+								{
+									$picUl.css('left',-520*$picLi.length+'px');
+									imgindex = $picLi.length-1;
+								}
+					});	
+				}
+						
+			});
+			//tab点击
+			$tab.click(function(){
+				var x = $(this).index()
+				$tab.eq(x).addClass('on').siblings().removeClass('on');
+				$picUl.stop().animate({
+					'left': -520*(x+1) + 'px'},500);	
+			});
+			//自动轮播
+			function auto(){
+				timer = setInterval(
+				function(){
+					imgindex++;
+					var tabindex = imgindex%$tab.length;
+					$tab.eq(tabindex).addClass('on').siblings().removeClass('on');
+					$picUl.stop().animate({
+						'left': -520*(imgindex+1) + 'px'},
+						500,function(){
+								if ( imgindex == $picLi.length )
+								{
+									$picUl.css('left','-520px');
+									imgindex =0;
+								}
+					});		
+				},2500);
+			}
+		})();
+	</script>
+ </body>
+</html>
