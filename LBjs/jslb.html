@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8"> 
+  <title> 无缝轮播图原生js版 </title>
+  <style type="text/css">
+	*{margin:0;padding:0;}
+	#banner{
+		width:500px;
+		height:360px;
+		border: 1px solid red;
+		margin:100px auto;
+		overflow:hidden;
+		position:relative;
+	}
+	#pic{
+		width:1000%;
+		height:360px;
+		margin-left:-500px;
+	}
+	img{
+		float:left;
+	}
+	#tab{
+		width:80px;
+		height:14px;
+		background:rgba(1,1,1,0.5);
+		margin-left:210px;
+		margin-top:-15px;
+		position:absolute;
+		border-radius:7px;
+	}
+	#tab ul li{
+		list-style:none;
+		width:10px;
+		height:10px;
+		float:left;
+		margin:2px 3px;
+		border-radius:100%;
+		background:#999;
+		cursor:pointer;
+	}
+	#tab ul li.on{
+		background:#f60;
+	}
+	#btn div{
+		width:28px;
+		height:44px;
+		background:#000;
+		background:rgba(0,0,0,.5);
+		font-size:20px;
+		color:#fff;
+		font-weight:bold;
+		line-height:44px;
+		text-align:center;
+		position:absolute;
+		top:158px;
+		cursor:pointer;
+	}
+	#right{
+		right:0px;
+	}
+  </style>
+ </head>
+ <body>
+  <div id="banner" class="">
+	<div id="pic" class="">
+		<img src="images/5.jpg" width="" height="" border="0" alt="">
+		<img src="images/1.jpg" width="" height="" border="0" alt="">
+		<img src="images/2.jpg" width="" height="" border="0" alt="">
+		<img src="images/3.jpg" width="" height="" border="0" alt="">
+		<img src="images/4.jpg" width="" height="" border="0" alt="">
+		<img src="images/5.jpg" width="" height="" border="0" alt="">
+		<img src="images/1.jpg" width="" height="" border="0" alt="">
+	</div>
+	<div id="tab" class="">
+		<ul>
+			<li class="on"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<div id="btn" class="">
+		<div id="left" class="">
+		&lt;	
+		</div>
+		<div id="right" class="">
+		&gt;	
+		</div>
+	</div>
+  </div>
+  <script type="text/javascript" src="move.js">
+  </script>
+  <script type="text/javascript">
+	var oImg = document.getElementsByTagName("img");
+	var oTab = document.getElementsByTagName("li");
+	var oPic = document.getElementById("pic");
+	var oLeft = document.getElementById("left");
+	var oRight = document.getElementById("right");
+	var oBanner = document.getElementById("banner");
+	var index = 0;
+	var nowtime = 0;
+	var timer;
+	for (var i=0;i<oTab.length;i++ )
+	{
+		oTab[i].i = i;
+		oTab[i].onclick = function(){
+		oTab[index].className = " ";
+		index = this.i;
+		change();
+		};
+	};
+	oLeft.onclick = function(){
+		if (new Date() - nowtime >300)
+		{
+			nowtime = new Date();
+			oTab[index].className = " ";
+			index = index<0?oTab.length-1:index-1;
+			change();
+		};
+	};
+	oRight.onclick = function(){
+		if (new Date() - nowtime >300)
+		{
+			nowtime = new Date();
+			oTab[index].className = " ";
+			index++;
+			index %= oTab.length+1;
+			change();
+		};
+	};
+	auto();
+	oBanner.onmouseover = function(){
+		clearInterval(timer);
+	};
+	oBanner.onmouseout = function(){
+		auto();
+	};
+	function auto(){
+		timer = setInterval(function(){
+			oTab[index].className = " ";
+			index++;
+			index %= oTab.length+1;
+			change();
+		},1000);
+	};
+	function change(){
+		var a = index;
+		a %= oTab.length;
+		if (a < 0)a = oTab.length-1;
+		oTab[a].className = "on";
+		move( oPic,{marginLeft:-500*(index+1) + "px"},function(){
+			if (index == oTab.length)
+			{
+				this.style.marginLeft = "-500px";
+				index = a;
+			}
+			else if ( index == -1)
+			{	
+				this.style.marginLeft = -500*5 +"px";
+				index = a;
+			}
+		},300);
+	}
+  </script>
+ 
+ </body>
+</html>
